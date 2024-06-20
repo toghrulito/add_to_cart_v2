@@ -22,9 +22,12 @@ onAuthStateChanged(auth, (user) => {
     if (user) {
         userId = user.uid;
         setupShoppingList();
+        document.getElementById('auth-container').style.display = 'none';
+        document.getElementById('shopping-container').style.display = 'block';
     } else {
         userId = null;
-        // Handle user not logged in state
+        document.getElementById('auth-container').style.display = 'block';
+        document.getElementById('shopping-container').style.display = 'none';
     }
 });
 
@@ -32,7 +35,6 @@ onAuthStateChanged(auth, (user) => {
 function signUp(email, password) {
     createUserWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
-            // Signed in 
             const user = userCredential.user;
             userId = user.uid;
             setupShoppingList();
@@ -46,7 +48,6 @@ function signUp(email, password) {
 function logIn(email, password) {
     signInWithEmailAndPassword(auth, email, password)
         .then((userCredential) => {
-            // Signed in
             const user = userCredential.user;
             userId = user.uid;
             setupShoppingList();
@@ -129,3 +130,16 @@ function appendItemToShoppingListEl(item, fragment) {
 
     fragment.appendChild(newEl);
 }
+
+// Event listener for sign-up and login buttons
+document.getElementById('signup-button').addEventListener('click', () => {
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    signUp(email, password);
+});
+
+document.getElementById('login-button').addEventListener('click', () => {
+    const email = document.getElementById('email').value;
+    const password = document.getElementById('password').value;
+    logIn(email, password);
+});

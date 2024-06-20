@@ -1,6 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap');
 
-/* General Styles */
 html, body {
     margin: 0;
     padding: 0;
@@ -70,13 +69,5 @@ img {
 }
 
 img:hover {
-    transform: scale(1.1);
-}
-
-#shopping-container input, #shopping-container button {
-    color: #432000;
-    background-color: #FFD180;
-    border: 0;
-    padding: 15px;
-    border-radius: 8px;
+    transform: scale(1.05);
 }
