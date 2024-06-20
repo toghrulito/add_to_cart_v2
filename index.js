@@ -16,6 +16,10 @@ const app = initializeApp(appSettings);
 const database = getDatabase(app);
 const auth = getAuth(app);
 
+const inputFieldEl = document.getElementById("input-field");
+const addButtonEl = document.getElementById("add-button");
+const shoppingListEl = document.getElementById("shopping-list");
+
 let userId = null;
 
 onAuthStateChanged(auth, (user) => {
@@ -38,6 +42,8 @@ function signUp(email, password) {
             const user = userCredential.user;
             userId = user.uid;
             setupShoppingList();
+            document.getElementById('auth-container').style.display = 'none';
+            document.getElementById('shopping-container').style.display = 'block';
         })
         .catch((error) => {
             console.error("Error signing up:", error);
@@ -51,6 +57,8 @@ function logIn(email, password) {
             const user = userCredential.user;
             userId = user.uid;
             setupShoppingList();
+            document.getElementById('auth-container').style.display = 'none';
+            document.getElementById('shopping-container').style.display = 'block';
         })
         .catch((error) => {
             console.error("Error logging in:", error);
