@@ -1,0 +1,82 @@
+@import url('https://fonts.googleapis.com/css2?family=Comic+Neue:wght@400;700&display=swap');
+
+/* General Styles */
+html, body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Comic Neue', sans-serif;
+    background-color: #FFF3E0;
+    color: #432000;
+    user-select: none;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    max-width: 320px;
+    margin: 30px auto;
+    align-items: center;
+}
+
+#auth-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 320px;
+    margin: 30px auto;
+    align-items: center;
+}
+
+#auth-container input, #auth-container button {
+    color: #432000;
+    background-color: #FFD180;
+    border: 0;
+    padding: 15px;
+    border-radius: 8px;
+    font-size: 20px;
+    text-align: center;
+    font-family: 'Comic Neue', sans-serif;
+    margin: 10px 0;
+    width: 100%;
+    box-sizing: border-box;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+#auth-container input::placeholder {
+    color: #432000;
+    opacity: 0.7;
+}
+
+#auth-container input:focus, #auth-container button:focus {
+    outline: none;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+#auth-container button {
+    color: #FFFFFF;
+    background-color: #FF8A65;
+}
+
+#auth-container button:hover {
+    background-color: #D84315;
+    cursor: pointer;
+    transform: scale(1.05);
+}
+
+img {
+    width: 150px;
+    margin: 0 auto;
+    transition: transform 0.3s ease;
+}
+
+img:hover {
+    transform: scale(1.1);
+}
+
+#shopping-container input, #shopping-container button {
+    color: #432000;
+    background-color: #FFD180;
+    border: 0;
+    padding: 15px;
+    border-radius: 8px;
+}
