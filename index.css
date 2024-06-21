@@ -67,6 +67,7 @@ img {
     width: 150px;
     margin: 0 auto;
     transition: transform 0.3s ease;
+    display: block; /* Ensure the image is a block element */
 }
 
 img:hover {

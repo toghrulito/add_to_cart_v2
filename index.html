@@ -15,12 +15,19 @@
     <body>
         <div class="container">
             <div id="auth-container">
-                <input type="email" id="email" placeholder="Email">
-                <input type="password" id="password" placeholder="Password">
-                <button id="signup-button">Sign Up</button>
-                <button id="login-button">Log In</button>
+                <form id="auth-form">
+                    <input type="email" id="email" placeholder="Email">
+                    <input type="password" id="password" placeholder="Password">
+                    <div id="error-message" style="color: red; display: none;"></div>
+                    <button type="button" id="signup-button">Sign Up</button>
+                    <button type="button" id="login-button">Log In</button>
+                </form>
             </div>
             <div id="shopping-container" style="display: none;">
+                <div id="user-info">
+                    Logged in as: <span id="username"></span>
+                    <button id="logout-button">Log Out</button>
+                </div>
                 <img src="assets/cat.png" alt="Cat">
                 <input type="text" id="input-field" placeholder="E.g., Milk, Eggs, Bread">
                 <button id="add-button">Add to cart</button>

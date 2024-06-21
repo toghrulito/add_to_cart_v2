@@ -1,6 +1,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-app.js";
 import { getDatabase, ref, push, onValue, remove } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-database.js";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/9.15.0/firebase-auth.js";
 
 const appSettings = {
     databaseURL: "https://shoppinglist-f3431-default-rtdb.firebaseio.com/",
@@ -19,12 +19,16 @@ const auth = getAuth(app);
 const inputFieldEl = document.getElementById("input-field");
 const addButtonEl = document.getElementById("add-button");
 const shoppingListEl = document.getElementById("shopping-list");
+const errorMessageEl = document.getElementById("error-message");
+const usernameEl = document.getElementById("username");
+const logoutButtonEl = document.getElementById("logout-button");
 
 let userId = null;
 
 onAuthStateChanged(auth, (user) => {
     if (user) {
         userId = user.uid;
+        usernameEl.textContent = user.email;  // Display the user's email
         setupShoppingList();
         document.getElementById('auth-container').style.display = 'none';
         document.getElementById('shopping-container').style.display = 'block';
@@ -41,12 +45,20 @@ function signUp(email, password) {
         .then((userCredential) => {
             const user = userCredential.user;
             userId = user.uid;
+            usernameEl.textContent = user.email;  // Display the user's email
             setupShoppingList();
             document.getElementById('auth-container').style.display = 'none';
             document.getElementById('shopping-container').style.display = 'block';
+            errorMessageEl.style.display = 'none';  // Hide error message on successful sign-up
         })
         .catch((error) => {
             console.error("Error signing up:", error);
+            let errorMessage = "Error signing up. Please try again.";
+            if (error.code === 'auth/email-already-in-use') {
+                errorMessage = "This email is already in use. Please try logging in.";
+            }
+            errorMessageEl.textContent = errorMessage;  // Display the error message
+            errorMessageEl.style.display = 'block';  // Show error message
         });
 }
 
@@ -56,13 +68,28 @@ function logIn(email, password) {
         .then((userCredential) => {
             const user = userCredential.user;
             userId = user.uid;
+            usernameEl.textContent = user.email;  // Display the user's email
             setupShoppingList();
             document.getElementById('auth-container').style.display = 'none';
             document.getElementById('shopping-container').style.display = 'block';
+            errorMessageEl.style.display = 'none';  // Hide error message on successful login
         })
         .catch((error) => {
             console.error("Error logging in:", error);
+            errorMessageEl.textContent = "Incorrect username or password. Please try again.";
+            errorMessageEl.style.display = 'block';  // Show error message on login failure
         });
+}
+
+// Function to handle user logout
+function logOut() {
+    signOut(auth).then(() => {
+        document.getElementById('auth-container').style.display = 'block';
+        document.getElementById('shopping-container').style.display = 'none';
+        console.log("User logged out successfully");
+    }).catch((error) => {
+        console.error("Error logging out:", error);
+    });
 }
 
 // Function to set up the shopping list for the logged-in user
@@ -140,14 +167,18 @@ function appendItemToShoppingListEl(item, fragment) {
 }
 
 // Event listener for sign-up and login buttons
-document.getElementById('signup-button').addEventListener('click', () => {
+document.getElementById('signup-button').addEventListener('click', (event) => {
+    event.preventDefault();
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
     signUp(email, password);
 });
 
-document.getElementById('login-button').addEventListener('click', () => {
+document.getElementById('login-button').addEventListener('click', (event) => {
+    event.preventDefault();
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
     logIn(email, password);
 });
+
+logoutButtonEl.addEventListener('click', logOut);
