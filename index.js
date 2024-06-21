@@ -24,6 +24,7 @@ const usernameEl = document.getElementById("username");
 const logoutButtonEl = document.getElementById("logout-button");
 
 let userId = null;
+let isAdding = false; // Adding debounce flag
 
 onAuthStateChanged(auth, (user) => {
     if (user) {
@@ -113,28 +114,38 @@ function setupShoppingList() {
         }
     });
 
-    addButtonEl.addEventListener("click", function() {
-        addItem(shoppingListInDB);
-    });
+    // Add event listeners only once
+    addButtonEl.removeEventListener("click", handleAddItem);
+    addButtonEl.addEventListener("click", handleAddItem);
 
-    inputFieldEl.addEventListener("keydown", function(event) {
-        if (event.key === "Enter") {
-            addItem(shoppingListInDB);
-        }
-    });
+    inputFieldEl.removeEventListener("keydown", handleKeyDown);
+    inputFieldEl.addEventListener("keydown", handleKeyDown);
+}
 
-    function addItem(shoppingListRef) {
-        let inputValue = inputFieldEl.value.trim();
-        if (inputValue !== "") {
-            push(shoppingListRef, inputValue).then(() => {
-                console.log(`Added item: ${inputValue}`);
-                clearInputFieldEl();
-            }).catch((error) => {
-                console.error("Error adding item:", error);
-            });
-        } else {
-            console.log("Ignored empty input");
-        }
+function handleAddItem() {
+    if (isAdding) return; // Debounce check
+    isAdding = true;
+
+    const shoppingListInDB = ref(database, `shoppingLists/${userId}`);
+    let inputValue = inputFieldEl.value.trim();
+    if (inputValue !== "") {
+        push(shoppingListInDB, inputValue).then(() => {
+            console.log(`Added item: ${inputValue}`);
+            clearInputFieldEl();
+        }).catch((error) => {
+            console.error("Error adding item:", error);
+        }).finally(() => {
+            isAdding = false; // Reset debounce flag
+        });
+    } else {
+        console.log("Ignored empty input");
+        isAdding = false; // Reset debounce flag
+    }
+}
+
+function handleKeyDown(event) {
+    if (event.key === "Enter") {
+        handleAddItem();
     }
 }
 
